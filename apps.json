@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Cookie MCP",
+    "description": "An MCP server that gives AI agents full onchain access to Cookie Chain — trade, launch, LP, stake, and bridge.",
+    "tag": "Infra",
+    "href": "https://github.com/cookiechain/cookie-mcp",
+    "x": "https://x.com/TheCookieChain",
+    "github": "https://github.com/cookiechain/cookie-mcp",
+    "logo": "https://raw.githubusercontent.com/cookiechain/superteam-hackathon-submissions/main/logos/cookie-mcp.png",
+    "live": true
+  }
+]
