@@ -1,0 +1,36 @@
+[
+  {
+    "id": "cookie-mcp",
+    "title": "Cookie MCP",
+    "shortDescription": "The onchain execution layer for AI agents on Cookie Chain.",
+    "description": "Cookie MCP is a Model Context Protocol server that enables AI agents to interact directly with Cookie Chain. Agents can execute swaps, launch tokens, provide liquidity, stake assets, bridge tokens, inspect balances, and interact with supported DeFi protocols through a unified interface.",
+    "category": "Infrastructure",
+    "tags": [
+      "AI",
+      "MCP",
+      "Infrastructure",
+      "DeFi"
+    ],
+    "links": {
+      "website": "https://cookiechain.wtf",
+      "demo": "https://cookiechain.wtf",
+      "github": "https://github.com/cookiechain/cookie-mcp",
+      "x": "https://x.com/TheCookieChain",
+      "docs": "https://github.com/cookiechain/cookie-mcp/blob/main/README.md",
+      "video": "https://raw.githubusercontent.com/cookiechain/cookie-mcp/main/docs/demo.gif"
+    },
+    "media": {
+      "logo": "https://raw.githubusercontent.com/cookiechain/superteam-hackathon-submissions/main/logos/cookie-mcp.png",
+      "banner": "https://x.com/TheCookieChain/header_photo",
+      "screenshots": []
+    },
+    "team": [
+      {
+        "name": "Alex",
+        "role": "Developer",
+        "x": "https://x.com/fibanachos",
+        "github": "https://github.com/fibanachos"
+      }
+    ]
+  }
+]
