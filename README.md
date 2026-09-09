@@ -27,8 +27,9 @@ This repo is the record of everything submitted to the bounty. Each entry is cap
 
 ```txt
 .
-├── apps.json   # one object per submission
-└── logos/      # logo assets referenced by apps.json
+├── apps.json      # one object per submission
+├── logos/         # logo assets referenced by apps.json
+└── screenshots/   # screenshot and banner assets, one subfolder per submission
 ```
 
 ## Entry Format
@@ -84,8 +85,8 @@ Each submission is one object in `apps.json`. `null` and `[]` are fine for anyth
 | `links.docs` | — | Documentation |
 | `links.video` | — | Demo walkthrough — the single most useful thing for a reviewer if the app needs setup |
 | `media.logo` | yes | Raw GitHub URL to the file you added under `logos/` |
-| `media.banner` | — | Wide header image |
-| `media.screenshots` | — | Array of image URLs |
+| `media.banner` | — | Wide header image, committed under `screenshots/<id>/` |
+| `media.screenshots` | — | Array of raw GitHub URLs — see [Screenshots](#screenshots) |
 | `team[].name` | yes | One object per team member |
 | `team[].role` | — | e.g. `Developer`, `Design` |
 | `team[].x`, `team[].github` | — | Per-member profiles |
@@ -104,21 +105,62 @@ Then reference it by raw URL:
 https://raw.githubusercontent.com/cookiechain/superteam-hackathon-submissions/main/logos/<id>.png
 ```
 
+### Screenshots
+
+Screenshots and banners go in their own subfolder under `screenshots/`, named after your `id`:
+
+```txt
+screenshots/
+└── cookie-mcp/
+    ├── banner.png
+    ├── 01-agent-swap.png
+    └── 02-token-launch.png
+```
+
+Reference them by raw URL, the same as the logo:
+
+```json
+"media": {
+  "logo": "https://raw.githubusercontent.com/cookiechain/superteam-hackathon-submissions/main/logos/cookie-mcp.png",
+  "banner": "https://raw.githubusercontent.com/cookiechain/superteam-hackathon-submissions/main/screenshots/cookie-mcp/banner.png",
+  "screenshots": [
+    "https://raw.githubusercontent.com/cookiechain/superteam-hackathon-submissions/main/screenshots/cookie-mcp/01-agent-swap.png",
+    "https://raw.githubusercontent.com/cookiechain/superteam-hackathon-submissions/main/screenshots/cookie-mcp/02-token-launch.png"
+  ]
+}
+```
+
+Number them so they display in a sensible order. Keep each under ~1 MB — resize wide images to 1600px:
+
+```bash
+magick shot.png -resize 1600x -strip -define png:compression-level=9 screenshots/<id>/01-name.png
+```
+
+> **All media must be committed to this repo.** `logo`, `banner`, and every entry in `screenshots` must be a
+> `raw.githubusercontent.com/cookiechain/superteam-hackathon-submissions/main/...` URL pointing at a file you
+> added under `logos/` or `screenshots/`. Hotlinking to X, Imgur, IPFS, or your own host is not accepted —
+> those links rot, change behind our backs, and several are not image endpoints at all. Anything you can't
+> host here yet should be `null` or `[]`.
+
 ## Submitting
 
 Submitting here does **not** enter you into the bounty on its own — the official submission still goes through the Superteam Earn listing. Use this repo so the app is catalogued alongside the rest.
 
 1. Fork this repository.
-2. Add your logo to `logos/`, named after your `id`.
+2. Add your logo to `logos/`, named after your `id`, and any screenshots to `screenshots/<id>/`.
 3. Append your entry to `apps.json`.
 4. Open a Pull Request titled with your project name.
 
-Validate before opening the PR — valid JSON, no duplicate `id`, and every logo actually present:
+Validate before opening the PR — valid JSON, no duplicate `id`, no externally hosted media, and every referenced file actually present:
 
 ```bash
 jq empty apps.json
 jq -r '[.[].id] | group_by(.) | map(select(length > 1) | .[0]) | join(", ")' apps.json
-jq -r '.[].media.logo | sub(".*/logos/"; "logos/")' apps.json | xargs ls
+PREFIX=https://raw.githubusercontent.com/cookiechain/superteam-hackathon-submissions/main/
+jq -r --arg p "$PREFIX" '.[].media | [.logo, .banner] + .screenshots | .[] | select(. != null)
+   | select(startswith($p) | not)' apps.json          # must print nothing: no external media
+jq -r --arg p "$PREFIX" '.[].media | [.logo, .banner] + .screenshots | .[] | select(. != null)
+   | sub($p; "")' apps.json | xargs ls                 # every referenced file exists
 ```
 
 ## Review Criteria
